@@ -1,8 +1,13 @@
 import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
 
 
-const server = new ApolloServer({});
+const typeDefs = `#graphql
+    type Query {
+        movies: String
+    }
+`;
+const server = new ApolloServer({ typeDefs })
 
-server.listen().then(({ url }) => {
-    console.log(`running on ${url}`);
-});
+const { url } = await startStandaloneServer(server);
+console.log(`start sever ${url}`);
