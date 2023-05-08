@@ -1,0 +1,20 @@
+{
+  "name": "graphql-api-study",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "nodemon --exec server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.7.1",
+    "graphql": "^16.6.0"
+  }
+}
