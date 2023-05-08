@@ -3,8 +3,14 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 
 
 const typeDefs = `#graphql
+    type Dolls {
+        id: ID
+        name: String
+        created: String
+    }
     type Query {
-        movies: String
+        allDolles: [Dolls] 
+        doll(id: ID): Dolls
     }
 `;
 const server = new ApolloServer({ typeDefs })
