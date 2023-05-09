@@ -1,7 +1,7 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 
-const dolls = [
+let dolls = [
     {
         id: 1,
         name: "bear",
@@ -62,6 +62,30 @@ const resolvers = {
         },
         doll(root, { id }) {
             return dolls.find((doll) => parseInt(doll.id) === parseInt(id));
+        }
+    },
+    Mutation:{
+        postDolls(root, { name, userId }) {
+            const newDolls = {
+                id: dolls.length + 1,
+                name,
+                created: new Date().toLocaleString("ko-kr", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                }),
+            };
+            dolls.push(newDolls);
+            return newDolls;
+        },
+        deleteDolls(root, { id }) {
+            const doll = dolls.find(
+              (doll) => parseInt(doll.id) === parseInt(id)
+            )
+            if (!doll) return false;
+            dolls = dolls.filter(doll => parseInt(doll.id) !== parseInt(id));
+            return true;
         }
     },
 };
