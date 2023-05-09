@@ -4,22 +4,22 @@ import { startStandaloneServer } from "@apollo/server/standalone";
 
 const typeDefs = `#graphql
     type Users{
-        id:ID
-        name:String
+        id:ID!
+        name:String!
     }
     type Dolls {
-        id: ID
-        name: String
-        created: String
+        id: ID!
+        name: String!
+        created: String!
     }
     type Query {
-        allDolles: [Dolls] 
-        doll(id: ID): Dolls
+        allDolles: [Dolls!]! 
+        doll(id: ID!): Dolls
     }
 
     type Mutation{
-        postDolls(name:String, userId:ID): Dolls
-        deleteDolls(id:ID): Boolean
+        postDolls(name:String!, userId:ID!): Dolls
+        deleteDolls(id: ID!): Boolean
     }
 `;
 const server = new ApolloServer({ typeDefs })
