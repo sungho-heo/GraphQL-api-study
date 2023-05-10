@@ -11,6 +11,7 @@ let dolls = [
             month: "long",
             day: "numeric",
         }),
+        userId: 1
     },
     {
         id: 2,
@@ -21,6 +22,7 @@ let dolls = [
             month: "long",
             day: "numeric",
         }),
+        userId: 2
     },
     {
         id: 3,
@@ -31,6 +33,7 @@ let dolls = [
             month: "long",
             day: "numeric",
         }),
+        userId:2
     },
 ];
 
@@ -58,6 +61,7 @@ const typeDefs = `#graphql
         id: ID!
         name: String!
         created: String!
+        oner:User
     }
     type Query {
         allDolles: [Dolls!]!
@@ -72,47 +76,63 @@ const typeDefs = `#graphql
 `
 
 const resolvers = {
-    Query: {
-        allDolles() {
-            return dolls
-        },
-        doll(root, { id }) {
-            return dolls.find((doll) => parseInt(doll.id) === parseInt(id));
-        },
-        allUsers() {
-            return users;
-        }
+  Query: {
+    allDolles() {
+      return dolls
     },
-    Mutation:{
-        postDolls(root, { name, userId }) {
-            const newDolls = {
-                id: dolls.length + 1,
-                name,
-                created: new Date().toLocaleString("ko-kr", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                }),
-            };
-            dolls.push(newDolls);
-            return newDolls;
-        },
-        deleteDolls(root, { id }) {
-            const doll = dolls.find(
-              (doll) => parseInt(doll.id) === parseInt(id)
-            )
-            if (!doll) return false;
-            dolls = dolls.filter(doll => parseInt(doll.id) !== parseInt(id));
-            return true;
-        }
+    doll(root, { id }) {
+      const doll = dolls.find((doll) => parseInt(doll.id) === parseInt(id))
+      if (!doll){
+          throw Error("doll not found");    
+      }
+      return doll
     },
-    User: {
-        fullName({ firstName, lastName }, args, context, info) {
-            return `${firstName}${lastName}`;
-        }
-    }
-};
+    allUsers() {
+      return users
+    },
+  },
+  Mutation: {
+      postDolls(root, { name, userId }) {
+      const user = users.find((user) => parseInt(user.id) === parseInt(userId));
+      if (!user) {
+          throw Error("user not found");
+      }
+      const newDolls = {
+        id: dolls.length + 1,
+        name,
+        created: new Date().toLocaleString("ko-kr", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        userId,
+      };
+      dolls.push(newDolls)
+      return newDolls
+    },
+    deleteDolls(root, { id }) {
+      const doll = dolls.find((doll) => parseInt(doll.id) === parseInt(id))
+      if (!doll) return false
+      dolls = dolls.filter((doll) => parseInt(doll.id) !== parseInt(id))
+      return true
+    },
+  },
+  User: {
+    fullName({ firstName, lastName }, args, context, info) {
+      return `${firstName}${lastName}`
+    },
+  },
+    Dolls: {
+        oner({ userId }) {
+            const user = users.find(user => user.id === userId);
+            if (!user) {
+                throw Error("User not found");
+            }
+            return user;
+      }
+  }
+}
 const server = new ApolloServer({ typeDefs, resolvers })
 
 const { url } = await startStandaloneServer(server);
