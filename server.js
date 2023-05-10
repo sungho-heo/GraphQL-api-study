@@ -51,12 +51,21 @@ const users = [
 ];
 
 const typeDefs = `#graphql
+"""
+Doll create User
+"""
     type User{
         id:ID!
         firstName:String!
         lastName:String!
+        """
+        fullName firstName + lastName objects
+        """
         fullName:String!
     }
+"""
+Mayn people create Dolls objects 
+"""
     type Dolls {
         id: ID!
         name: String!
