@@ -1,10 +1,9 @@
 import { ApolloServer } from "@apollo/server"
-import { startStandaloneServer } from "@apollo/server/standalone";
-import axios from "axios";
-import { apiKey } from "../config.js";
+import { startStandaloneServer } from "@apollo/server/standalone"
+import axios from "axios"
+import { apiKey } from "../config.js"
 
-
-const apiLink = `https://api.themoviedb.org/3`;
+const apiLink = `https://api.themoviedb.org/3`
 
 const typeDefs = `#graphql
   type Genre{
@@ -47,13 +46,16 @@ const resolvers = {
         (json) => json.data.genres
       )
     },
+    movie(_, { id }) {
+      return axios(`${apiLink}/movie/${id}?api_key=${apiKey}`).then(
+        (json) => json.data
+      )
+    },
   },
 }
 
+const server = new ApolloServer({ typeDefs, resolvers })
 
-
-const server = new ApolloServer({ typeDefs,resolvers })
-
-
-await startStandaloneServer(server).then(result => console.log(` 🚀 Start Server ${result.url}`)).catch((err) => err);
-
+await startStandaloneServer(server)
+  .then((result) => console.log(` 🚀 Start Server ${result.url}`))
+  .catch((err) => err)
