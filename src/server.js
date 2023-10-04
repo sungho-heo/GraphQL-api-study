@@ -1,9 +1,9 @@
-import { ApolloServer } from "@apollo/server"
-import { startStandaloneServer } from "@apollo/server/standalone"
-import axios from "axios"
-import { apiKey } from "../config.js"
+import { ApolloServer } from "@apollo/server";
+import { startStandaloneServer } from "@apollo/server/standalone";
+import axios from "axios";
+import { apiKey } from "../config.js";
 
-const apiLink = `https://api.themoviedb.org/3`
+const apiLink = `https://api.themoviedb.org/3`;
 
 const typeDefs = `#graphql
   type Genre{
@@ -27,35 +27,34 @@ const typeDefs = `#graphql
   }
   
   type Query{
-    allMovies:[Movie!]!
+    allMovies(page: Int!):[Movie!]!
     allGenres:[Genre!]!
     movie(id:ID!): Movie
   }
-`
-
+`;
 const resolvers = {
   Query: {
-    allMovies() {
-      return axios(`${apiLink}/movie/top_rated?api_key=${apiKey}`)
+    allMovies(_, { page }) {
+      return axios(`${apiLink}/movie/popular?api_key=${apiKey}&page=${page}`)
         .then((json) => json)
         .then((result) => result.data.results)
-        .catch((err) => err)
+        .catch((err) => err);
     },
     allGenres() {
       return axios(`${apiLink}/genre/movie/list?api_key=${apiKey}`).then(
         (json) => json.data.genres
-      )
+      );
     },
     movie(_, { id }) {
       return axios(`${apiLink}/movie/${id}?api_key=${apiKey}`).then(
         (json) => json.data
-      )
+      );
     },
   },
-}
+};
 
-const server = new ApolloServer({ typeDefs, resolvers })
+const server = new ApolloServer({ typeDefs, resolvers });
 
 await startStandaloneServer(server)
   .then((result) => console.log(` 🚀 Start Server ${result.url}`))
-  .catch((err) => err)
+  .catch((err) => err);
