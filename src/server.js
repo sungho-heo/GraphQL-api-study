@@ -11,24 +11,31 @@ const typeDefs = `#graphql
     name: String!
   }
 
-  type Movie{
+  type Movies{
     id: ID!
     adult: Boolean!
-    genre_ids: Genre
-    backdrop_path: String!
     title: String!
     original_language: String!
     overview: String!
     poster_path: String!
     release_date: String!
-    video: Boolean!
     vote_average: Float!
+    vote_count: Int!
+  }
+
+  type Movie{
+    id: ID!
+    title: String!
+    genres: [Genre!]!
+    overview: String!
+    poster_path: String!
+    vote_average: Float!
+    release_date: String!
     vote_count: Int!
   }
   
   type Query{
-    allMovies(page: Int!):[Movie!]!
-    allGenres:[Genre!]!
+    allMovies(page: Int!):[Movies!]!
     movie(id:ID!): Movie
   }
 `;
@@ -39,11 +46,6 @@ const resolvers = {
         .then((json) => json)
         .then((result) => result.data.results)
         .catch((err) => err);
-    },
-    allGenres() {
-      return axios(`${apiLink}/genre/movie/list?api_key=${apiKey}`).then(
-        (json) => json.data.genres
-      );
     },
     movie(_, { id }) {
       return axios(`${apiLink}/movie/${id}?api_key=${apiKey}`).then(
