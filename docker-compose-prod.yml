@@ -1,8 +1,0 @@
-version: "3"
-services:
-  grapql-server:
-    build:
-      dockerfile: Dockerfile.prod
-    ports:
-      - "8080:80"
-      # 80: HTTP Port for NGINX Web Server
