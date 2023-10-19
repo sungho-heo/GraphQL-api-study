@@ -1,7 +1,6 @@
 import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import axios from "axios";
-import { apiKey } from "../config.js";
 
 const apiLink = `https://api.themoviedb.org/3`;
 
@@ -42,13 +41,15 @@ const typeDefs = `#graphql
 const resolvers = {
   Query: {
     allMovies(_, { page }) {
-      return axios(`${apiLink}/movie/popular?api_key=${apiKey}&page=${page}`)
+      return axios(
+        `${apiLink}/movie/popular?api_key=${process.env.APIKEY}&page=${page}`
+      )
         .then((json) => json)
         .then((result) => result.data.results)
         .catch((err) => err);
     },
     movie(_, { id }) {
-      return axios(`${apiLink}/movie/${id}?api_key=${apiKey}`).then(
+      return axios(`${apiLink}/movie/${id}?api_key=${process.env.APIKEY}`).then(
         (json) => json.data
       );
     },
