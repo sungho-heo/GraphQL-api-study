@@ -14,12 +14,9 @@ const typeDefs = `#graphql
     id: ID!
     adult: Boolean!
     title: String!
-    original_language: String!
-    overview: String!
     poster_path: String!
     release_date: String!
     vote_average: Float!
-    vote_count: Int!
   }
 
   type Movie{
@@ -30,7 +27,6 @@ const typeDefs = `#graphql
     poster_path: String!
     vote_average: Float!
     release_date: String!
-    vote_count: Int!
   }
   
   type Query{
