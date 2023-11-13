@@ -45,7 +45,9 @@ const resolvers = {
         .catch((err) => err);
     },
     movie(_, { id }) {
-      return axios(`${apiLink}/movie/${id}?api_key=${process.env.APIKEY}`)
+      return axios(
+        `${apiLink}/movie/${id}?language=ko-KR&api_key=${process.env.APIKEY}`
+      )
         .then((json) => json.data)
         .catch((err) => err);
     },
