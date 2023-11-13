@@ -33,17 +33,12 @@ const typeDefs = `#graphql
     allMovies(page: Int!):[Movies!]!
     movie(id:ID!): Movie
   }
-
-  type Mutation{
-      getMovies(id:ID!): Movies
-      getMovie(id:ID): Movie
-  }
 `;
 const resolvers = {
   Query: {
     allMovies(_, { page }) {
       return axios(
-        `${apiLink}/movie/top_rated?api_key=${process.env.APIKEY}&page=${page}`
+        `${apiLink}/movie/top_rated?language=ko-KR&api_key=${process.env.APIKEY}&page=${page}`
       )
         .then((json) => json)
         .then((result) => result.data.results)
